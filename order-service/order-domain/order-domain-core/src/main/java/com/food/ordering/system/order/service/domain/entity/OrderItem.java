@@ -51,6 +51,9 @@ public class OrderItem extends BaseEntity<OrderItemId> {
          super.setId(orderItemId);
     }
 
+    public static Builder builder(){
+        return Builder.builder();
+    }
 
     public static final class Builder {
         private OrderItemId orderItemId;

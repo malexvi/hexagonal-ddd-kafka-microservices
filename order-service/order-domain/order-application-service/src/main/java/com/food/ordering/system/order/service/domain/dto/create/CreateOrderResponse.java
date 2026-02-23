@@ -5,7 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.validator.constraints.UUID;
+
+import java.util.UUID;
 
 @Getter
 @Builder

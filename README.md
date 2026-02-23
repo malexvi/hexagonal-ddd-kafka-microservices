@@ -45,6 +45,7 @@ food-ordering-system
     ├── order-data-access
     ├── order-messaging
     └── order-container
+    This project needs git config --global core.longpaths true since some paths may be >260 chars long
 ```
 
 ## Getting Started

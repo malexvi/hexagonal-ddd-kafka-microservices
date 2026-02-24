@@ -30,6 +30,7 @@ public class OrderCreateCommandHandler {
     private final CustomerRepository customerRepository;
     private final RestaurantRepository restaurantRepository;
     private final OrderDataMapper orderDataMapper;
+    private final ApplicationDomainEventPublisher applicationDomainEventPublisher;
 
     @Transactional
     public CreateOrderResponse createOrder(CreateOrderCommand createOrderCommand) {
@@ -38,6 +39,8 @@ public class OrderCreateCommandHandler {
         Order order = orderDataMapper.createOrderCommandToOder(createOrderCommand);
         OrderCreatedEvent orderCreatedEvent = orderDomainService.validateAndInitiateOrder(order, restaurant);
         Order orderResult = saveOrder(order);
+
+        applicationDomainEventPublisher.publish(orderCreatedEvent);
 
         log.info("Order is created with id: {}", orderResult.getId().getValue());
         return orderDataMapper.orderToCreateOrderResponse(orderResult);
@@ -64,12 +67,12 @@ public class OrderCreateCommandHandler {
         }
     }
 
-    private Order saveOrder(Order order){
+    private Order saveOrder(Order order) {
         Order orderResult = orderRepository.save(order);
 
-        if(orderResult == null){
+        if (orderResult == null) {
             log.error("Could not save order!");
-            throw new  OrderDomainException("Could not save order!");
+            throw new OrderDomainException("Could not save order!");
         }
 
         log.info("Order is saved with id: {} ", order.getId().getValue());

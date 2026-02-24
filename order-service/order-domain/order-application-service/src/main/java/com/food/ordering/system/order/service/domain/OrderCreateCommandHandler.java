@@ -33,17 +33,15 @@ public class OrderCreateCommandHandler {
     private final ApplicationDomainEventPublisher applicationDomainEventPublisher;
 
     @Transactional
-    public CreateOrderResponse createOrder(CreateOrderCommand createOrderCommand) {
+    public CreateOrderResponse createOrder(CreateOrderCommand createOrderCommand){
         checkCustomer(createOrderCommand.getCustomerId());
         Restaurant restaurant = checkRestaurant(createOrderCommand);
-        Order order = orderDataMapper.createOrderCommandToOder(createOrderCommand);
+        Order order = orderDataMapper.createOrderCommandToOrder(createOrderCommand);
         OrderCreatedEvent orderCreatedEvent = orderDomainService.validateAndInitiateOrder(order, restaurant);
-        Order orderResult = saveOrder(order);
-
-        applicationDomainEventPublisher.publish(orderCreatedEvent);
+        Order orderResult = saveOrder(orderCreatedEvent.getOrder());
 
         log.info("Order is created with id: {}", orderResult.getId().getValue());
-        return orderDataMapper.orderToCreateOrderResponse(orderResult, "Order Created Successfully");
+        return orderDataMapper.orderToCreateOrderResponse(orderCreatedEvent.getOrder(), "Create order successfully");
     }
 
     private Restaurant checkRestaurant(CreateOrderCommand createOrderCommand) {

@@ -2,6 +2,7 @@ package com.food.ordering.system.order.service.domain;
 
 import com.food.ordering.system.domain.valueobject.*;
 import com.food.ordering.system.order.service.domain.dto.create.CreateOrderCommand;
+import com.food.ordering.system.order.service.domain.dto.create.CreateOrderResponse;
 import com.food.ordering.system.order.service.domain.entity.Customer;
 import com.food.ordering.system.order.service.domain.entity.Order;
 import com.food.ordering.system.order.service.domain.entity.Product;
@@ -12,6 +13,8 @@ import com.food.ordering.system.order.service.domain.ports.input.service.OrderAp
 import com.food.ordering.system.order.service.domain.ports.output.repository.CustomerRepository;
 import com.food.ordering.system.order.service.domain.ports.output.repository.OrderRepository;
 import com.food.ordering.system.order.service.domain.ports.output.repository.RestaurantRepository;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +24,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -49,12 +54,13 @@ public class OrderApplicationServiceTest {
     private CreateOrderCommand createOrderCommand;
     private CreateOrderCommand createOrderCommandWrongPrice;
     private CreateOrderCommand createOrderCommandWrongProductPrice;
-    private final UUID CUSTOMER_ID = UUID.fromString("d123f3f1-1234-3df4-45g6-43fd632cfb23");
-    private final UUID RESTAURANT_ID = UUID.fromString("d123f3f2-1234-3df4-45g6-43fd632cfb23");
-    private final UUID PRODUCT_ID = UUID.fromString("d123f3f3-1234-3df4-45g6-43fd632cfb23");
-    private final UUID ORDER_ID = UUID.fromString("d123f3f4-1234-3df4-45g6-43fd632cfb23");
+    private final UUID CUSTOMER_ID   = UUID.fromString("3f9a2c4e-6b7d-4f1a-9c2e-1a7b3d5e8f01");
+    private final UUID RESTAURANT_ID = UUID.fromString("7c2d1e90-3a4b-4c8f-b2e1-6d9f0a3b5c22");
+    private final UUID PRODUCT_ID    = UUID.fromString("a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c55");
+    private final UUID ORDER_ID      = UUID.fromString("b8e4f2a1-9c3d-4e6f-a2b1-5d7c8e9f0a77");
     private final BigDecimal PRICE = new BigDecimal("200.00");
 
+    @BeforeAll
     public void init() {
         // 1. Success command
         createOrderCommand = TestHelper
@@ -102,7 +108,7 @@ public class OrderApplicationServiceTest {
 
         /*Order*/
 
-        Order order = orderDataMapper.createOrderCommandToOder(createOrderCommand);
+        Order order = orderDataMapper.createOrderCommandToOrder(createOrderCommand);
         order.setId(new OrderId(ORDER_ID));
 
         /*when*/
@@ -111,4 +117,15 @@ public class OrderApplicationServiceTest {
                 .thenReturn(Optional.of(restaurantResponse));
         when(orderRepository.save(any(Order.class))).thenReturn(order);
     }
+
+    @Test
+    public void testCreateOrder() {
+        CreateOrderResponse createOrderResponse = orderApplicationService.createOrder(createOrderCommand);
+
+        assertEquals(createOrderResponse.getOrderStatus(), OrderStatus.PENDING);
+        assertEquals(createOrderResponse.getMessage(), "Create order successfully");
+        assertNotNull(createOrderResponse.getOrderTrackingId());
+
+    }
+
 }

@@ -34,7 +34,7 @@ public class OrderDataMapper {
     }
 
     // will be used to create the domain objects from the input data transfer objects and vice versa
-    public Order createOrderCommandToOder(CreateOrderCommand createOrderCommand) {
+    public Order createOrderCommandToOrder(CreateOrderCommand createOrderCommand) {
         return Order.builder()
                 .customerId(new CustomerId(createOrderCommand.getCustomerId()))
                 .restaurantId(new RestaurantId(createOrderCommand.getRestaurantId()))

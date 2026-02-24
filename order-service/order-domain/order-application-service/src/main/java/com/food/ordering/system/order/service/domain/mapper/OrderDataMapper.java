@@ -49,17 +49,18 @@ public class OrderDataMapper {
                 .map(orderItem ->
                         OrderItem.builder()
                                 .product(new Product(new ProductId(orderItem.getProductId())))
-                                .price(new Money(orderItem.getPrirce()))
+                                .price(new Money(orderItem.getPrice()))
                                 .quantity(orderItem.getQuantity())
                                 .sobTotal(new Money(orderItem.getSubTotal()))
                                 .build()).toList();
 
     }
 
-    public CreateOrderResponse orderToCreateOrderResponse(Order order){
+    public CreateOrderResponse orderToCreateOrderResponse(Order order, String message){
         return CreateOrderResponse.builder()
                 .orderTrackingId(order.getTrackingId().getValue())
                 .orderStatus(order.getOrderStatus())
+                .message(message)
                 .build();
     }
 

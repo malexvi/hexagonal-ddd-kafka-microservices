@@ -109,16 +109,16 @@ Once Zookeeper is healthy, start the Kafka cluster (Brokers, Schema Registry, an
 After the cluster is up and running, we need to create the specific topics required by our Domain-Driven Design (DDD)
 business rules. Run the initialization script (without the -d flag so you can see the logs finish):
 
-``docker compose -f common.yml -f init_kafka.yml up ```
+```docker compose -f common.yml -f init_kafka.yml up ```
 
-##4. Configuring Kafka Manager (CMAK)
+## 4. Configuring Kafka Manager (CMAK)
 To visually monitor your Kafka cluster, topics, and brokers, we use Kafka Manager.
 
 1. Open your browser and access: ```http://localhost:9000/```
 2. In the top menu, go to Cluster > Add Cluster.
 3. Fill in the following fields:
     * Cluster Name: ``` food-ordering-system-cluster```
-    * Cluster Zookeeper Hosts: ```zookeeper:2181
+    * Cluster Zookeeper Hosts: ```zookeeper:2181```
         * **What does zookeeper:2181 mean**? > Since all our containers are running inside the same internal Docker network
         (```food-ordering-system```), they can talk to each other using their service names instead of IP addresses. zookeeper
         is the internal DNS hostname of our container, and 2181 is the port it uses to communicate.

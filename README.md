@@ -108,8 +108,7 @@ Once Zookeeper is healthy, start the Kafka cluster (Brokers, Schema Registry, an
 ### 3.1 Creating Kafka Topics
 After the cluster is up and running, we need to create the specific topics required by our Domain-Driven Design (DDD)
 business rules. Run the initialization script (without the -d flag so you can see the logs finish):
-
-``docker compose -f common.yml -f init_kafka.yml up ```
+```docker compose -f common.yml -f init_kafka.yml up ```
 
 ##4. Configuring Kafka Manager (CMAK)
 To visually monitor your Kafka cluster, topics, and brokers, we use Kafka Manager.

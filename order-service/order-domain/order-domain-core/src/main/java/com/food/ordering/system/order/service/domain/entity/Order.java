@@ -89,7 +89,7 @@ public class Order extends AggregateRoot<OrderId> {
 
     private void validateItemsPrice() {
         Money orderItemsTotal = items.stream().map(orderItem -> {
-            validateOrderPrice(orderItem);
+            validateItemPrice(orderItem);
             return orderItem.getSubTotal();
         }).reduce(Money.ZERO, Money::add);
 
@@ -99,10 +99,10 @@ public class Order extends AggregateRoot<OrderId> {
         }
     }
 
-    private void validateOrderPrice(OrderItem orderItem) {
+    private void validateItemPrice(OrderItem orderItem){
         if(!orderItem.isPriceValid()){
-            throw new OrderDomainException("Order price: " + orderItem.getPrice().getAmount() +
-                    " is not valid for product: " + orderItem.getProduct().getId().getValue());
+            throw new OrderDomainException("Order item price: " + orderItem.getPrice().getAmount() +
+                    " is not valid for product " + orderItem.getProduct().getId().getValue());
         }
     }
 

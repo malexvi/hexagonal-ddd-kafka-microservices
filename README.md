@@ -61,6 +61,76 @@ cd order-service/order-container
 mvn spring-boot:run
 ```
 
+## Infrastructure Configuration & Execution
+This project relies on Docker Compose to run the local infrastructure (Zookeeper, Kafka Cluster, Schema Registry, and Kafka Manager).
+
+Note for Windows Users: The commands below are identical and can be executed in both PowerShell and Git Bash.
+
+### 1. Starting Zookeeper
+Zookeeper acts as the centralized service for maintaining configuration information and naming for the Kafka brokers.
+We must start it first.
+
+``` bash
+docker compose -f common.yml -f zookeeper.yml up -d
+```
+
+Understanding the flags used:
+
+* ``` bash docker compose``` : The command to run Docker Compose (in newer versions, it replaces ``` bash docker-compose```).
+* ``` bash -f <filename>``` : Stands for "file". It tells Docker which configuration file to use. We pass it twice to merge
+ our common.yml (which contains our shared network) with the ``` bash zookeeper.yml``` file.
+* ``` bash up``` : The command to create and start the containers.
+* ``` bash -d``` : Stands for "detach" (background mode). It runs the containers in the background so your terminal doesn't get locked, allowing you to type new commands.
+
+### 2. Verifying Zookeeper Health
+Before starting Kafka, it is highly recommended to check if Zookeeper is fully operational.
+
+First, list your running containers to get the Zookeeper container ID or name:
+
+``` bash docker ps -a ```
+
+(The ```bash ```-a flag stands for "all", which lists all containers, even the stopped ones).
+Then, execute the health check command using the container ID or name (e.g., docker-compose-zookeeper-1 or 74767a087db1):
+
+```bash docker exec <container_id_or_name> sh -c "echo ruok | nc localhost 2181" ```
+
+#### Expected Output: imok (I am OK).
+Understanding the flags used:
+
+* ```bash exec```: Tells Docker to execute a command inside an already running container.
+* ```bash sh -c```: Opens the shell inside the Linux container and passes a string command to be executed.
+* ```bash echo ruok | nc localhost 2181```: Sends the "Are you OK?" (```bash ruok```) command using Netcat (```bash nc```) to Zookeeper's default port (```bash 2181```).
+
+
+### 3. Starting the Kafka Cluster
+Once Zookeeper is healthy, start the Kafka cluster (Brokers, Schema Registry, and Kafka Manager):
+```bash docker compose -f common.yml -f kafka_cluster.yml up -d```
+
+### 3.1 Creating Kafka Topics
+After the cluster is up and running, we need to create the specific topics required by our Domain-Driven Design (DDD)
+business rules. Run the initialization script (without the -d flag so you can see the logs finish):
+
+``bash docker compose -f common.yml -f init_kafka.yml up ```
+
+##4. Configuring Kafka Manager (CMAK)
+To visually monitor your Kafka cluster, topics, and brokers, we use Kafka Manager.
+
+1. Open your browser and access: ```bash http://localhost:9000/```
+2. In the top menu, go to Cluster > Add Cluster.
+3. Fill in the following fields:
+    * Cluster Name: ```bash food-ordering-system-cluster```
+    * Cluster Zookeeper Hosts: ```bash zookeeper:2181
+        * **What does zookeeper:2181 mean**? > Since all our containers are running inside the same internal Docker network
+        (```bash food-ordering-system```), they can talk to each other using their service names instead of IP addresses. zookeeper
+        is the internal DNS hostname of our container, and 2181 is the port it uses to communicate.
+4. Enable the checkbox: ```bash Enable JMX Polling``` (Optional but recommended for metrics).
+5. Click Save.
+
+Now you can access http://localhost:9000/clusters/food-ordering-system-cluster to see your running brokers and dynamically created topics!
+
+To run everything:
+```bash docker compose -f common.yml -f zookeeper.yml -f kafka_cluster.yml -f init_kafka.yml up -d --build```
+
 ## Goals of This Project
 
 * Demonstrate enterprise-grade architecture

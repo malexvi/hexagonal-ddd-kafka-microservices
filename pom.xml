@@ -6,7 +6,7 @@
 
     <modules>
         <module>order-service</module>
-        <module>commom</module>
+        <module>common</module>
         <module>infrastructure</module>
         <module>infrastructure/kafka</module>
     </modules>
@@ -60,7 +60,7 @@
             </dependency>
             <dependency>
                 <groupId>com.food.ordering.system</groupId>
-                <artifactId>order-dataaccess</artifactId>
+                <artifactId>order-data-access</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -137,7 +137,7 @@
 
             <dependency>
                 <groupId>com.food.ordering.system</groupId>
-                <artifactId>commom-domain</artifactId>
+                <artifactId>common-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

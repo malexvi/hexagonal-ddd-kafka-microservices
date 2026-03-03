@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
         <groupId>com.food.ordering.system</groupId>
-        <artifactId>commom-domain</artifactId>
+        <artifactId>common-domain</artifactId>
     </dependency>
     </dependencies>
 

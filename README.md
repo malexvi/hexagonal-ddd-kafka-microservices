@@ -130,6 +130,9 @@ Now you can access http://localhost:9000/clusters/food-ordering-system-cluster t
 To run everything:
 ```docker compose -f common.yml -f zookeeper.yml -f kafka_cluster.yml -f init_kafka.yml up -d --build```
 
+To create the project dependency graph:
+```mvn com.github.ferstl:depgraph-maven-plugin:aggregate -DcreateImage=true -DreduceEdges=false -Dscope=compile "-Dincludes=com.food.ordering.system*:*"```
+
 ## Goals of This Project
 
 * Demonstrate enterprise-grade architecture

@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>order-service</artifactId>
+    <artifactId>order-service</artifactId><!--Aqui é o pai-->
     <packaging>pom</packaging>
     <modules>
         <module>order-domain</module>

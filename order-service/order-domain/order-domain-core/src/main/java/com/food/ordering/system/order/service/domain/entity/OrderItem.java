@@ -17,7 +17,7 @@ public class OrderItem extends BaseEntity<OrderItemId> {
         product = builder.product;
         quantity = builder.quantity;
         price = builder.price;
-        subTotal = builder.sobTotal;
+        subTotal = builder.subTotal;
     }
 
     boolean isPriceValid(){
@@ -60,7 +60,7 @@ public class OrderItem extends BaseEntity<OrderItemId> {
         private Product product;
         private int quantity;
         private Money price;
-        private Money sobTotal;
+        private Money subTotal;
 
         private Builder() {
         }
@@ -89,8 +89,8 @@ public class OrderItem extends BaseEntity<OrderItemId> {
             return this;
         }
 
-        public Builder sobTotal(Money val) {
-            sobTotal = val;
+        public Builder subTotal(Money val) {
+            subTotal = val;
             return this;
         }
 

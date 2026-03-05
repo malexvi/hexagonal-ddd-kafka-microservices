@@ -22,7 +22,7 @@ public class OrderAddressEntity {
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;
 
-    private String streed;
+    private String street;
     private String postalCode;
     private String city;
 

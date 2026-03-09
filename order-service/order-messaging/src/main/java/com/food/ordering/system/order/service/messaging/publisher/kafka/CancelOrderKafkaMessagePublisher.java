@@ -8,11 +8,7 @@ import com.food.ordering.system.order.service.domain.event.OrderCancelledEvent;
 import com.food.ordering.system.order.service.domain.ports.output.message.publisher.payment.OrderCanceledPaymentRequestMessagePublisher;
 import com.food.ordering.system.order.service.messaging.mapper.OrderMessagingDataMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Slf4j
 @Component
@@ -45,8 +41,8 @@ public class CancelOrderKafkaMessagePublisher implements OrderCanceledPaymentReq
                         orderId,
                         paymentRequestAvroModel,
                         orderKafkaMessageHelper
-                                .getKafkaCallback(orderServiceConfigData
-                                        .getPaymentRequestTopicName(), paymentRequestAvroModel));
+                                .getKafkaCallback(orderServiceConfigData.getPaymentRequestTopicName(),
+                                        paymentRequestAvroModel, orderId, "PaymentRequestAvroModel"));
 
                 log.info("PaymentRequestAvroModel sent to Kafka for order id: {}", orderId);
 
